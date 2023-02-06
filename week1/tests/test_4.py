@@ -23,6 +23,16 @@ def test_head_v3_faster_than_head_v1():
     assert time_taken_v3 < time_taken_v1
 
 
+def test_head_v3_logits_are_properly_masked():
+    B, T, C = 4, 10, 8
+    x = torch.rand(B, T, C)
+    head = HeadVer3()
+    head(x)
+    expected = torch.ones(B, T)
+    was = head.wei.sum(dim=-1)
+    assert torch.allclose(expected, was)
+
+
 def test_head_v3_logits_are_properly_normalized():
     x = torch.Tensor([[[1, 2, 3],
                        [4, 5, 6],
@@ -34,14 +44,4 @@ def test_head_v3_logits_are_properly_normalized():
                                  [0, 0, 0]]])
     # convert the Bool tensor to Int tensor
     was = (head.wei == 0.0).int()
-    assert torch.allclose(expected, was)
-
-
-def test_head_v3_logits_are_properly_masked():
-    B, T, C = 4, 10, 8
-    x = torch.rand(B, T, C)
-    head = HeadVer3()
-    head(x)
-    expected = torch.ones(B, T)
-    was = head.wei.sum(dim=-1)
     assert torch.allclose(expected, was)
