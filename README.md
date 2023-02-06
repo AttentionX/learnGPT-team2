@@ -1,4 +1,4 @@
-# learnGPT - team 1
+# learnGPT - team 2
 
 ## week 1
 
