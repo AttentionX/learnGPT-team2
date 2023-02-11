@@ -18,6 +18,8 @@ def test_head_v1_takes_an_average_of_the_past_into_account():
 def test_gpt_v2_and_head_v1_generates_text_given_a_context():
     torch.manual_seed(1337)
     head = HeadVer1()
+    # vocab size: how many characters are in the text
+    # Q: what is embed size?
     lm = GPTVer2(head, config['vocab_size'], config['embed_size'], config['block_size'])
     train(lm)  # may take a while
     expected = "The quick brown fox jumps over the lazyvee\nd ont phour teo, nwch aydo"

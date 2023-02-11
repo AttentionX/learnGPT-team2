@@ -14,6 +14,8 @@ class HeadVer3:
         """
         # --- TODO 4 --- #
 
+        # Softmax: e ^ x / (e ^ max(x) * sum(e ^ x / e ^ max(x)))
+        # Weight must be negative infinity to ensure the output is 0 and therefore masked
         wei = ...
         self.wei = wei.detach()
         out = ...

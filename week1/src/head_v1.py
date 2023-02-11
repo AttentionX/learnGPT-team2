@@ -7,12 +7,14 @@ class HeadVer1:
         :param x (B, T, C)
         :return: out (B, T, C)
         """
-        B, T, C = x.shape
+        B, T, C = x.shape # 32, 8, 32
+        # B: batch size, T: Seq len, C: Embedding table weight dimension
         # --- TODO 2 --- #
         # use nested for loops to take an average of the past into account
         out = torch.zeros((B,T,C))
         for idx_b in range(B):
             for idx_t in range(T):
+                # calculate mean 
                 past_x = x[idx_b, :idx_t + 1]
                 out[idx_b, idx_t] = torch.mean(past_x, 0)
         return out

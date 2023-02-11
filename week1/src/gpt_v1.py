@@ -16,6 +16,7 @@ class GPTVer1(nn.Module):
             tuple[torch.Tensor, Optional[torch.Tensor]]:
         # idx and targets are both (B, T) tensor of integers
         logits = self.logits(idx)  # (B, T) ->  (B, T, C)
+        # B: batch size, T: Seq len, C: Embedding table weight dimension
         if targets is None:
             loss = None
         else:
@@ -31,13 +32,27 @@ class GPTVer1(nn.Module):
     @torch.no_grad()
     def generate(self, idx: torch.Tensor, max_new_tokens: int) -> torch.Tensor:
         # idx is (B, T) array of indices in the current context
+
+        # generate character to append for max_new_token times
+        # idx shape will change from [1, original_str_size] -> [1, new_str_size]
+        # where new_str_size = original_str_size + max_new_tokens
+
         for _ in range(max_new_tokens):
             # --- TODO 1 --- #
-            latest_index = idx[:, -self.block_size:]
+            # get index for last, most recent iteration
+            # to do this, travel back to block size ago
+
+            latest_index = idx[:, -self.block_size:] # latest_indx: [1, block_size]
+
+            # generate logit(probability) for latest_index and reshape
             logits, _ = self(latest_index)
             logits = logits[:, -1, :]
+            #softmax
             prob = F.softmax(logits, dim=1)
 
+            # sample one idx with softmax as base distribution
             next_index = torch.multinomial(prob, 1)
+
+            # add newly generated(=predicted) index
             idx = torch.concat((idx, next_index), dim=1)
         return idx
