@@ -31,11 +31,11 @@ class HeadVer4(torch.nn.Module):
             k = self.key(x)  # (B, T, C)
             v = self.value(x)  # (B, T, C)
         # --- TODO 5 --- #
-        wei = ...
+        wei = q @ k.transpose(-2, -1) * C**-0.5 # (B, T, C) @ (B, C, T) -> (B, T, T)
         self.var = wei.var().detach()  # log the variance of the attention scores right after scaling with 1/sqrt(d_k)
-        wei = ...
+        wei = wei.masked_fill(self.tril[:T, :T] == 0, float('-inf'))
+        wei = torch.softmax(wei, dim=-1) # (B, T, T)
         self.wei = wei.detach()  # log the final weights
-        out = ...
-        raise NotImplementedError
+        out = wei @ v
         # ------------ #
         return out

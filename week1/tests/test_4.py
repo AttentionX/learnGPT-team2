@@ -2,7 +2,9 @@ import torch
 import timeit
 from ..src import HeadVer1, HeadVer3
 
+# past average 의 softmax(negative infinite future masking) 형태 구현 테스트
 
+# 값이 같은지 확인
 def test_head_v3_logically_the_same_as_head_v1():
     x = torch.Tensor([[[1, 2, 3],
                        [4, 5, 6],
@@ -13,7 +15,7 @@ def test_head_v3_logically_the_same_as_head_v1():
     y_v3 = head_v3(x)
     assert torch.allclose(y_v1, y_v3)
 
-
+# 행렬 곱셈을 통해 구현해 속도가 더 빠른지 확인
 def test_head_v3_faster_than_head_v1():
     x = torch.rand(4, 128, 1024)
     head_v1 = HeadVer1()
@@ -22,7 +24,7 @@ def test_head_v3_faster_than_head_v1():
     time_taken_v3 = timeit.timeit(lambda: head_v3(x), number=10)
     assert time_taken_v3 < time_taken_v1
 
-
+# weight 의 합이 1인지 확인 (softmax 를 통해 구현했는지 확인)
 def test_head_v3_logits_are_properly_masked():
     B, T, C = 4, 10, 8
     x = torch.rand(B, T, C)

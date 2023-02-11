@@ -20,6 +20,7 @@ class GPTVer1(nn.Module):
             loss = None
         else:
             B, T, C = logits.shape
+            # cross_entropy 함수는 Channel 이 두번째 element에 있는 걸 요구하기 때문에 텐서 shape 을 바꾼다
             logits = logits.view(B * T, C)  # (B, T, C) ->  (B * T, C)
             targets = targets.view(B * T)  # (B, T) -> (B * T)
             loss = F.cross_entropy(logits, targets)  # (B * T, C), (B * T) -> scalar
@@ -33,7 +34,12 @@ class GPTVer1(nn.Module):
         # idx is (B, T) array of indices in the current context
         for _ in range(max_new_tokens):
             # --- TODO 1 --- #
-            idx = ...
-            raise NotImplementedError
+            last_idx = idx[:, -self.block_size:] # (B, T + a) -> (B, T)
+            logits, loss = self(last_idx) # (B, T, C)
+            # see only last token
+            logits = logits[:, -1, :] # (B, C)
+            probs = F.softmax(logits, dim=-1) # (B, C)
+            idx_next = torch.multinomial(probs, num_samples=1) # (B, 1)
+            idx = torch.cat((idx, idx_next), dim=1)
             # -------------- #
         return idx

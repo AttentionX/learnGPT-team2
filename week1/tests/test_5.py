@@ -13,7 +13,7 @@ def test_head_v4_attention_has_no_notion_of_space():
     x2 = torch.Tensor([[[4, 5, 6],
                         [1, 2, 3],
                         [7, 8, 9]]])
-    _, T, C = x1.shape
+    _, T, C = x1.shape # (1, 3, 3)
     head = HeadVer4(T, C)
     y1 = head(x1)  # (B, T, C)
     y2 = head(x2)  # (B, T, C)
