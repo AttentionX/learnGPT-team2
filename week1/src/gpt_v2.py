@@ -20,7 +20,7 @@ class GPTVer2(GPTVer1):
         :return: logits (B, T, |V|)
         """
         # --- TODO 2 --- #
-        logits = ...
-        raise NotImplementedError
-        # -------------- #
+        embedding = self.token_embedding_table(idx)
+        past = self.head(embedding)
+        logits = self.lm_head(past)
         return logits

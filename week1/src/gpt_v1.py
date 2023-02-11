@@ -33,7 +33,11 @@ class GPTVer1(nn.Module):
         # idx is (B, T) array of indices in the current context
         for _ in range(max_new_tokens):
             # --- TODO 1 --- #
-            idx = ...
-            raise NotImplementedError
-            # -------------- #
+            latest_index = idx[:, -self.block_size:]
+            logits, _ = self(latest_index)
+            logits = logits[:, -1, :]
+            prob = F.softmax(logits, dim=1)
+
+            next_index = torch.multinomial(prob, 1)
+            idx = torch.concat((idx, next_index), dim=1)
         return idx
