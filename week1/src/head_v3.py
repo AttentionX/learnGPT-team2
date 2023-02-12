@@ -16,9 +16,17 @@ class HeadVer3:
 
         # Softmax: e ^ x / (e ^ max(x) * sum(e ^ x / e ^ max(x)))
         # Weight must be negative infinity to ensure the output is 0 and therefore masked
-        wei = ...
+        _, T, _ = x.shape
+        tril = torch.tril(torch.ones(T, T))
+        wei = torch.zeros((T, T))
+
+        # Negative infinity instead of zeros for masked parts
+        wei = wei.masked_fill(tril == 0, float('-inf'))
+        # Now add softmax
+        wei = torch.softmax(wei, dim=-1)
+        out = wei @ x
+
+        # Computations will come to a stop
         self.wei = wei.detach()
-        out = ...
-        raise NotImplementedError
         # -------------- #
         return out

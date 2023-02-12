@@ -29,8 +29,6 @@ class GPTVer2(GPTVer1):
         # Attention head for past(average)
         past = self.head(embedding)
         # Return logits with input of 32 -> 65
-        print("past: ",past.shape)
         logits = self.lm_head(past)
-        print("logits: ", logits.shape)
         # And with these logits, our gpt model will sample chars with our distribution
         return logits

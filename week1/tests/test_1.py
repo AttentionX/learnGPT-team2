@@ -9,7 +9,7 @@ from .test_utils import config, train, generate
 
 def test_gpt_v1_generates_text_given_a_context():
     torch.manual_seed(1337)
-    # block size meaning how many stacks of blocks consist the encoder
+    # block size meaning how many stacks of blocks consist the decoder
     # Question: do encoders and decoders maintain the same number of blocks?
     lm = GPTVer1(config['vocab_size'], config['block_size'])
     train(lm)
