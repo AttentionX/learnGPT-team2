@@ -2,7 +2,7 @@ import torch
 from ..src import HeadVer1, GPTVer2
 from .test_utils import train, generate, config
 
-
+# past average 테스트
 def test_head_v1_takes_an_average_of_the_past_into_account():
     x = torch.Tensor([[[1, 2, 3],
                        [4, 5, 6],
