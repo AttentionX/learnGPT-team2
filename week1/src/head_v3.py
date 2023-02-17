@@ -17,7 +17,13 @@ class HeadVer3:
         tril = torch.tril(torch.ones(T, T))
         weight = torch.zeros((T, T))
         weight = weight.masked_fill(tril == 0, float('-inf'))
+        #          | 1 0 0 |                 | 0 -inf -inf |
+        # tril  =  | 1 1 0 |  --> weight  =  | 0   0  -inf |
+        #          | 1 1 1 |                 | 0   0    0  |
         weight = torch.softmax(weight, dim=-1)
+        #  |  1   0   0  |
+        #  | 1/2 1/2  0  |
+        #  | 1/3 1/3 1/3 |
         out = weight @ x
         self.wei = weight.detach()
         # -------------- #

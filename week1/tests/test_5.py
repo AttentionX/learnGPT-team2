@@ -60,6 +60,8 @@ def test_head_v4_logits_are_properly_normalized():
     assert torch.allclose(expected, was)
 
 
+# Q @ K / sqrt(C) 
+# scale 값이 GPT3 API 의 hyperparameter 'temperature' 와 같은 역할을 할 수 있는 것 같다고 함
 def test_head_v4_the_variance_of_wei_after_scale_is_1():
     B, T, C = 4, 128, 1024
     x = torch.randn(B, T, C)
