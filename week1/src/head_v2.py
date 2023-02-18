@@ -16,6 +16,12 @@ class HeadVer2:
         # Rest will be 0
         weights = torch.tril(torch.ones(T, T))
         # Weights shape: 128 * 128, x: 4 * 128 * 1024
+        print("weights: ", weights.shape)
+        print("weights.sum: ", weights.sum(1, keepdim=True).shape)
+
+        print(weights)
+        print(weights.sum(1, keepdim=True))
         weights = weights / weights.sum(1, keepdim=True)
+        print(weights)
         out = weights @ x
         return out

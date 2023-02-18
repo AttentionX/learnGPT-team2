@@ -24,11 +24,14 @@ class GPTVer2(GPTVer1):
         print("idx", idx.shape) # idx: 32,8
         # looks up embeddings for given 32, 8 and for each of them returns values with the corresponding dimension
         # Q: what is seq len?
+        print(self.token_embedding_table.weight.shape)
         embedding = self.token_embedding_table(idx) # return embedding: 32, 8, 32
-
+        print("2: ",embedding.shape)
         # Attention head for past(average)
         past = self.head(embedding)
+        print("3: ",past.shape)
         # Return logits with input of 32 -> 65
         logits = self.lm_head(past)
+        print("4: ",logits.shape)
         # And with these logits, our gpt model will sample chars with our distribution
         return logits
