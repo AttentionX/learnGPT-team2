@@ -18,7 +18,10 @@ class BlockVer3(BlockVer2):
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
         # --- TODO 3-2 --- #
-        raise NotImplementedError
-        x = ...
+        # transformer 의 초기 버전에서는 Layer Normalization 이 layer 뒤에 있었지만
+        # 최신 모델은 앞에 붙는다.
+        # -> 
+        x = x + self.head(self.ln1(x))
+        x = x + self.ffwd(self.ln2(x))
         # ---------------- #
         return x

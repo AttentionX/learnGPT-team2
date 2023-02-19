@@ -9,7 +9,8 @@ from ..src.block_v3 import BlockVer3
 from ..src.multi_head_v2 import MultiHeadVer2
 from .conftest import config, train
 
-
+# Normalization이 잘 되었는지 확인
+# 평균이 0이고 분산이 1인지 확인
 def test_layer_norm_features_dim_is_properly_normalized():
     B, T, C = 32, 64, 512
     ln = LayerNorm(C)
@@ -20,7 +21,8 @@ def test_layer_norm_features_dim_is_properly_normalized():
     assert torch.allclose(mean_across_features, torch.zeros(mean_across_features.shape))
     assert torch.allclose(var_across_features, torch.ones(var_across_features.shape))
 
-
+# LayerNorm이 없을 때는 gradient가 0에 가까워지고
+# LayerNorm이 있을 때는 gradient가 0에 가까워지지 않는다.
 def test_layer_norm_mitigates_vanishing_gradient():
     depth = 1000
     B, T, C = 3, 64, 128
@@ -45,7 +47,7 @@ def test_layer_norm_mitigates_vanishing_gradient():
     # gradients should not be near-zero
     assert not torch.allclose(torch.round(with_norm), torch.zeros(with_norm.shape))
 
-
+# LayerNorm 을 적용했을 때 loss가 빠르게 감소한다는 것을 테스트
 # test: gpt v4 learns faster with LayerNorm
 def test_layer_norm_helps_when_network_is_deep():
     torch.manual_seed(1337)

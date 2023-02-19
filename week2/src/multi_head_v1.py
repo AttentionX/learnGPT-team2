@@ -31,5 +31,6 @@ class MultiHeadVer1(torch.nn.Module):
         """
         # --- TODO 1-1 --- #
         out = torch.cat([head(x) for head in self.heads], dim=-1)
+        out = self.proj(out)
         # ---------------- #
         return out

@@ -9,7 +9,8 @@ from ..src.multi_head_v1 import MultiHeadVer1
 from ..src.gpt_v4 import GPTVer4
 from .conftest import config, train
 
-
+# Dropout에 의해 랜덤으로 parameter 가 사용되지 않기 때문에
+# 매 run 만다 결과가 달라진다.
 def test_block_ver_4_output_is_always_different_in_train_mode():
     B, T, C = 32, 64, 512
     n_heads = 8
@@ -25,7 +26,7 @@ def test_block_ver_4_output_is_always_different_in_train_mode():
     assert not torch.allclose(out_2, out_3)
     assert not torch.allclose(out_3, out_4)
 
-
+# eval 모드에서는 dropout 이 적용되지 않기 때문에 결과가 항상 같다.
 def test_block_ver_4_output_is_always_the_same_in_eval_mode():
     B, T, C = 32, 64, 512
     n_heads = 8
@@ -41,7 +42,8 @@ def test_block_ver_4_output_is_always_the_same_in_eval_mode():
     assert torch.allclose(out_2, out_3)
     assert torch.allclose(out_3, out_4)
 
-
+# drop out 적용 이전에는 overfit이 발생하지만, 이후에는 발생하지 않는다는 것을 테스트
+# FAILED
 def test_dropout_helps():
     """
     dropout mitigates overfitting

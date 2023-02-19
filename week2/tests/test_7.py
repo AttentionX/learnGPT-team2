@@ -10,6 +10,7 @@ from ..src.gpt_v4 import GPTVer4
 from .conftest import config, train
 
 
+# multi-head attention의 parameter 갯수가 single attention과 같은지 확인
 def test_head_ver_4_and_multi_head_ver_1_are_equally_expensive():
     """
     trainable parameters of multi-head ver 1 and head ver 4 must be the same because
@@ -22,6 +23,7 @@ def test_head_ver_4_and_multi_head_ver_1_are_equally_expensive():
            == sum([p.numel() for p in head_v4.parameters() if p.requires_grad])
 
 
+#
 def test_multi_head_helps():
     """
     But multi-head leads to faster convergence than single head.

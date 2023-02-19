@@ -8,7 +8,8 @@ from ..src.multi_head_v2 import MultiHeadVer2
 from ..src.gpt_v4 import GPTVer4
 from .conftest import config, train
 
-
+# FFN 을 사용했을 때 loss 가 감소하는지 확인
+# FFN 의 의미는?
 def test_ffn_helps():
     torch.manual_seed(1337)
     T, C, n_heads = config['block_size'], config['embed_size'], config['n_heads']
@@ -23,6 +24,7 @@ def test_ffn_helps():
     assert losses_1['train'] > losses_2['train']
 
 
+# Residual 을 사용했을 때 loss 가 잘 감소하는지 확인
 def test_residual_conn_helps_when_network_is_deep():
     torch.manual_seed(1337)
     T, C, n_heads = config['block_size'], config['embed_size'], config['n_heads']
