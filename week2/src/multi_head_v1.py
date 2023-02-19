@@ -30,7 +30,8 @@ class MultiHeadVer1(torch.nn.Module):
         :return: (B, T, C)
         """
         # --- TODO 1-1 --- #
-        raise NotImplementedError
-        out = ...
+        head_res = [head(x) for head in self.heads]
+        head_cat = torch.cat(head_res, 2)
+        out = self.proj(head_cat)
         # ---------------- #
         return out

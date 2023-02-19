@@ -20,7 +20,6 @@ class BlockVer1(torch.nn.Module):
         :return: (B, T, C)
         """
         # --- TODO 2-2 --- #
-        raise NotImplementedError
-        x = ...
+        x = self.ffwd(self.head(x))
         # ---------------- #
         return x
