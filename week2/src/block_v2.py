@@ -10,6 +10,7 @@ class BlockVer2(BlockVer1):
         :return: (B, T, C)
         """
         # --- TODO 2-3 --- #
-        x = self.ffwd(self.head(x) + x) + self.head(x) + x
+        x = x + self.head(x)
+        x = x + self.ffwd(x)
         # --------------- #
         return x
